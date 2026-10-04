@@ -1,3 +1,5 @@
+<p align="center"><img src="icons/icon128.png" width="96" alt="No More AI Music"></p>
+
 # No More AI Music
 
 YouTube 플레이리스트에서 AI로 찍어낸 음악을 찾아 큐에서 숨기고, 재생되면 다음 곡으로 건너뛰는 Chrome 확장입니다.
