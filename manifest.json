@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "No More AI Music",
+  "version": "0.1.0",
+  "description": "YouTube 플레이리스트에서 AI로 생성된 음악을 찾아 큐에서 제거하고 건너뜁니다.",
+  "permissions": ["storage"],
+  "host_permissions": ["https://www.youtube.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["src/player-bridge.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": ["https://www.youtube.com/*"],
+      "js": ["src/settings.js", "src/detector.js", "src/youtube.js", "src/content.js"],
+      "run_at": "document_start"
+    }
+  ],
+  "action": {
+    "default_title": "No More AI Music",
+    "default_popup": "popup/popup.html"
+  },
+  "options_page": "options/options.html"
+}
