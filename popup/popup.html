@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { width: 300px; margin: 0; padding: 14px; font: 13px/1.5 system-ui, sans-serif; color: #222; }
+    h1 { font-size: 15px; margin: 0 0 10px; }
+    .row { display: flex; align-items: center; justify-content: space-between; margin: 8px 0; }
+    .box { background: #f4f4f4; border-radius: 6px; padding: 8px 10px; margin: 10px 0; }
+    .muted { color: #777; }
+    .ai { color: #c0262d; font-weight: 600; }
+    .ok { color: #1b7f3b; font-weight: 600; }
+    .buttons { display: flex; gap: 6px; margin-top: 8px; }
+    button { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 5px; background: #fff; cursor: pointer; }
+    button:hover { background: #eee; }
+    a { color: #065fd4; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <h1>No More AI Music</h1>
+  <label class="row">
+    <span>AI 음악 걸러내기</span>
+    <input type="checkbox" id="enabled" />
+  </label>
+
+  <div class="box" id="status"><span class="muted">YouTube 재생 페이지에서 상태가 표시됩니다.</span></div>
+
+  <div class="buttons" id="actions" hidden>
+    <button id="block">이 채널 차단</button>
+    <button id="allow">이 채널 허용</button>
+  </div>
+
+  <p class="muted" id="skips"></p>
+  <a id="options">설정 열기</a>
+
+  <script src="../src/settings.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

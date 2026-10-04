@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <title>No More AI Music 설정</title>
+  <style>
+    body { max-width: 640px; margin: 32px auto; padding: 0 16px; font: 14px/1.6 system-ui, sans-serif; color: #222; }
+    h1 { font-size: 20px; }
+    h2 { font-size: 15px; margin-top: 28px; border-bottom: 1px solid #ddd; padding-bottom: 4px; }
+    .muted { color: #777; font-size: 12px; }
+    textarea { width: 100%; height: 180px; font: 13px/1.5 ui-monospace, monospace; box-sizing: border-box; }
+    input[type=number] { width: 70px; }
+    ul { list-style: none; padding: 0; margin: 6px 0; }
+    li { display: flex; justify-content: space-between; align-items: center; padding: 4px 8px; border-radius: 4px; }
+    li:nth-child(odd) { background: #f6f6f6; }
+    li button { border: none; background: none; color: #c0262d; cursor: pointer; }
+    .add { display: flex; gap: 6px; }
+    .add input { flex: 1; }
+    label { display: block; margin: 6px 0; }
+    #save { margin-top: 24px; padding: 8px 20px; }
+    #saved { margin-left: 8px; color: #1b7f3b; }
+  </style>
+</head>
+<body>
+  <h1>No More AI Music 설정</h1>
+
+  <h2>판별 기준</h2>
+  <label><input type="checkbox" id="useSyntheticLabel" /> YouTube의 "Made with AI"(AI로 제작됨) 라벨이 붙은 영상을 AI로 판별</label>
+  <label>
+    <input type="checkbox" id="useUploadRate" /> 최근 7일 업로드가
+    <input type="number" id="uploadRateThreshold" min="1" /> 개 이상인 채널을 AI 양산 채널로 판별
+  </label>
+  <label>플레이리스트에서 미리 검사할 다음 곡 수 <input type="number" id="lookahead" min="0" max="30" /></label>
+
+  <h2>키워드</h2>
+  <p class="muted">제목·채널명·설명·태그에 포함되면 AI 음악으로 판별합니다. 한 줄에 하나씩 입력합니다. 영문은 단어 단위로 비교합니다.</p>
+  <textarea id="keywords"></textarea>
+
+  <h2>차단한 채널</h2>
+  <ul id="blockedList"></ul>
+  <div class="add"><input id="blockedInput" placeholder="채널명 (재생 중 팝업에서 차단하면 채널 ID로 정확히 저장됩니다)" /><button data-add="blocked">추가</button></div>
+
+  <h2>허용한 채널</h2>
+  <p class="muted">허용한 채널은 다른 기준에 걸려도 건너뛰지 않습니다.</p>
+  <ul id="allowedList"></ul>
+  <div class="add"><input id="allowedInput" placeholder="채널명" /><button data-add="allowed">추가</button></div>
+
+  <button id="save">저장</button><span id="saved"></span>
+
+  <script src="../src/settings.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>
