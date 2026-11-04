@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "No More AI Music",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "YouTube 플레이리스트에서 AI로 생성된 음악을 찾아 큐에서 제거하고 건너뜁니다.",
   "icons": {
     "16": "icons/icon16.png",
