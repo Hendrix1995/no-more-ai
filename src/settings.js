@@ -1,6 +1,7 @@
 // 확장 전체(content script, popup, options)에서 공유하는 설정.
 const NMA_DEFAULTS = {
   enabled: true,
+  language: 'auto', // 'auto' | 'ko' | 'en'
   keywords: [
     // 단독 'suno'는 힌디어 '들어라'와 겹쳐 문맥이 있는 형태만 둔다.
     '#suno',

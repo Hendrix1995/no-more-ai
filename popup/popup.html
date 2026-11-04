@@ -14,26 +14,31 @@
     button { flex: 1; padding: 6px; border: 1px solid #ccc; border-radius: 5px; background: #fff; cursor: pointer; }
     button:hover { background: #eee; }
     a { color: #065fd4; cursor: pointer; }
+    .footer { display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
   <h1>No More AI Music</h1>
   <label class="row">
-    <span>AI 음악 걸러내기</span>
+    <span data-i18n="popupToggle">AI 음악 걸러내기</span>
     <input type="checkbox" id="enabled" />
   </label>
 
-  <div class="box" id="status"><span class="muted">YouTube 재생 페이지에서 상태가 표시됩니다.</span></div>
+  <div class="box" id="status"><span class="muted" data-i18n="popupIdle">YouTube 재생 페이지에서 상태가 표시됩니다.</span></div>
 
   <div class="buttons" id="actions" hidden>
-    <button id="block">이 채널 차단</button>
-    <button id="allow">이 채널 허용</button>
+    <button id="block" data-i18n="popupBlock">이 채널 차단</button>
+    <button id="allow" data-i18n="popupAllow">이 채널 허용</button>
   </div>
 
   <p class="muted" id="skips"></p>
-  <a id="options">설정 열기</a>
+  <div class="footer">
+    <a id="options" data-i18n="popupOptions">설정 열기</a>
+    <a href="https://buymeacoffee.com/hendrix1995" target="_blank" rel="noopener" data-i18n="popupSupport">☕ 개발자에게 커피 한 잔</a>
+  </div>
 
   <script src="../src/settings.js"></script>
+  <script src="../src/i18n.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

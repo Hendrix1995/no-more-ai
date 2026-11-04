@@ -10,7 +10,7 @@ function renderList(kind) {
       label.textContent = entry.name || entry.id;
       if (entry.id) label.title = entry.id;
       const remove = document.createElement('button');
-      remove.textContent = '삭제';
+      remove.textContent = nmaT('optRemove');
       remove.addEventListener('click', () => {
         lists[kind].splice(i, 1);
         renderList(kind);
@@ -23,6 +23,19 @@ function renderList(kind) {
 
 async function init() {
   const s = await nmaLoadSettings();
+  nmaSetLanguage(s.language);
+  nmaApplyI18n();
+  document.title = nmaT('optTitle');
+  $('language').value = s.language;
+  // 언어는 저장 버튼 없이 바로 적용한다. 다른 입력값은 화면에 그대로 남는다.
+  $('language').addEventListener('change', async (e) => {
+    await nmaSaveSettings({ language: e.target.value });
+    nmaSetLanguage(e.target.value);
+    nmaApplyI18n();
+    document.title = nmaT('optTitle');
+    renderList('blocked');
+    renderList('allowed');
+  });
   $('useSyntheticLabel').checked = s.useSyntheticLabel;
   $('useUploadRate').checked = s.useUploadRate;
   $('uploadRateThreshold').value = s.uploadRateThreshold;
@@ -68,7 +81,7 @@ async function init() {
       blockedChannels: lists.blocked,
       allowedChannels: lists.allowed,
     });
-    $('saved').textContent = '저장했습니다.';
+    $('saved').textContent = nmaT('optSaved');
     setTimeout(() => ($('saved').textContent = ''), 2000);
   });
 }

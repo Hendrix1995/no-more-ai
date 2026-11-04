@@ -205,10 +205,10 @@
     skipCount++;
     consecutiveSkips++;
     if (consecutiveSkips > MAX_CONSECUTIVE_SKIPS) {
-      toast('연속으로 너무 많은 곡이 걸러져 재생을 멈췄습니다.');
+      toast(nmaT('toastTooMany'));
       return;
     }
-    toast(`AI 음악을 건너뛰었습니다 (${verdict.reasons.join(', ')})`);
+    toast(nmaT('toastSkipped', { reasons: nmaReasons(verdict.reasons) }));
     moveNext(videoId);
   }
 
@@ -218,7 +218,7 @@
     const { hasPlaylist, next } = findNextPlayable(videoId);
     if (hasPlaylist && !next) {
       pendingSkip = null;
-      toast('남은 곡이 모두 AI 음악으로 판별되어 재생을 멈췄습니다.');
+      toast(nmaT('toastAllAi'));
       return;
     }
     let moved = false;
@@ -351,6 +351,7 @@
     if (area !== 'local') return;
     if (!Object.keys(changes).some((k) => NMA_SETTING_KEYS.includes(k))) return;
     settings = await nmaLoadSettings();
+    nmaSetLanguage(settings.language);
     onSettingsChanged();
   });
 
@@ -397,6 +398,7 @@
     // media 이벤트는 버블링되지 않으므로 캡처 단계에서 받는다. 설정 로드보다 먼저 등록한다.
     document.addEventListener('play', onPlay, true);
     settings = await nmaLoadSettings();
+    nmaSetLanguage(settings.language);
     pruneCache().catch(() => {});
 
     document.addEventListener('yt-navigate-finish', onNavigate);

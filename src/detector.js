@@ -166,26 +166,26 @@
   // 없는 필드는 아직 확인하지 않은 것으로 본다.
   function evaluate(facts, settings) {
     const allowed = findChannel(settings.allowedChannels, facts.channelId, facts.channelName);
-    if (allowed) return { ai: false, reasons: ['허용한 채널'] };
+    if (allowed) return { ai: false, reasons: [{ code: 'allowed' }] };
 
     const reasons = [];
     if (findChannel(settings.blockedChannels, facts.channelId, facts.channelName)) {
-      reasons.push('차단한 채널');
+      reasons.push({ code: 'blocked' });
     }
 
     const fields = [
-      ['제목', facts.title],
-      ['채널명', facts.channelName],
-      ['설명', facts.description],
-      ['태그', (facts.tags || []).join(' , ')],
+      ['fieldTitle', facts.title],
+      ['fieldChannelName', facts.channelName],
+      ['fieldDescription', facts.description],
+      ['fieldTags', (facts.tags || []).join(' , ')],
     ];
-    for (const [label, text] of fields) {
+    for (const [field, text] of fields) {
       const kw = findKeyword(text, settings.keywords);
-      if (kw) reasons.push(`${label}에 "${kw}" 포함`);
+      if (kw) reasons.push({ code: 'keyword', field, keyword: kw });
     }
 
     if (settings.useSyntheticLabel && facts.syntheticLabel) {
-      reasons.push('YouTube 합성 콘텐츠 라벨');
+      reasons.push({ code: 'syntheticLabel' });
     }
 
     if (
@@ -193,7 +193,7 @@
       typeof facts.recentUploads === 'number' &&
       facts.recentUploads >= settings.uploadRateThreshold
     ) {
-      reasons.push(`최근 7일 업로드 ${facts.recentUploads}개`);
+      reasons.push({ code: 'uploads', count: facts.recentUploads });
     }
 
     return { ai: reasons.length > 0, reasons };
