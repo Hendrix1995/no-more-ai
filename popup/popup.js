@@ -38,22 +38,27 @@ async function loadStatus() {
     return; // YouTube 탭이 아니거나 content script가 아직 없음
   }
   if (!res) return;
-  $('skips').textContent = `이 탭에서 건너뛴 곡: ${res.skipCount}개`;
+  $('skips').textContent = nmaT('popupSkips', { count: res.skipCount });
   if (!res.videoId) return;
   if (res.error) {
-    setStatus([line('현재 곡을 확인하지 못했습니다.', 'muted'), line(res.error, 'muted')]);
+    setStatus([line(nmaT('popupCheckFailed'), 'muted'), line(res.error, 'muted')]);
     return;
   }
   current = res;
   const verdict = res.verdict.ai
-    ? line(`AI 음악으로 판별됨: ${res.verdict.reasons.join(', ')}`, 'ai')
-    : line(res.verdict.reasons.length ? `통과 (${res.verdict.reasons.join(', ')})` : '통과', 'ok');
-  setStatus([line(`채널: ${res.channelName || '알 수 없음'}`), verdict]);
+    ? line(nmaT('popupFlagged', { reasons: nmaReasons(res.verdict.reasons) }), 'ai')
+    : line(
+        res.verdict.reasons.length ? nmaT('popupPassedWith', { reasons: nmaReasons(res.verdict.reasons) }) : nmaT('popupPassed'),
+        'ok'
+      );
+  setStatus([line(nmaT('popupChannel', { name: res.channelName || nmaT('popupUnknown') })), verdict]);
   $('actions').hidden = !res.channelId;
 }
 
 async function init() {
   const s = await nmaLoadSettings();
+  nmaSetLanguage(s.language);
+  nmaApplyI18n();
   $('enabled').checked = s.enabled;
   $('enabled').addEventListener('change', (e) => nmaSaveSettings({ enabled: e.target.checked }));
   $('block').addEventListener('click', () => moveChannel('blockedChannels', 'allowedChannels'));

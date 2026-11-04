@@ -19,35 +19,48 @@
     label { display: block; margin: 6px 0; }
     #save { margin-top: 24px; padding: 8px 20px; }
     #saved { margin-left: 8px; color: #1b7f3b; }
+    .support { margin-top: 40px; padding-top: 12px; border-top: 1px solid #ddd; }
   </style>
 </head>
 <body>
-  <h1>No More AI Music 설정</h1>
+  <h1 data-i18n="optTitle">No More AI Music 설정</h1>
 
-  <h2>판별 기준</h2>
-  <label><input type="checkbox" id="useSyntheticLabel" /> YouTube의 "Made with AI"(AI로 제작됨) 라벨이 붙은 영상을 AI로 판별</label>
+  <h2 data-i18n="optLanguage">언어</h2>
+  <select id="language">
+    <option value="auto" data-i18n="optLanguageAuto">자동 (브라우저 언어)</option>
+    <option value="ko">한국어</option>
+    <option value="en">English</option>
+  </select>
+
+  <h2 data-i18n="optCriteria">판별 기준</h2>
+  <label><input type="checkbox" id="useSyntheticLabel" /> <span data-i18n="optSyntheticLabel"></span></label>
   <label>
-    <input type="checkbox" id="useUploadRate" /> 최근 7일 업로드가
-    <input type="number" id="uploadRateThreshold" min="1" /> 개 이상인 채널을 AI 양산 채널로 판별
+    <input type="checkbox" id="useUploadRate" /> <span data-i18n="optUploadRateBefore"></span>
+    <input type="number" id="uploadRateThreshold" min="1" /> <span data-i18n="optUploadRateAfter"></span>
   </label>
-  <label>플레이리스트에서 미리 검사할 다음 곡 수 <input type="number" id="lookahead" min="0" max="30" /></label>
+  <label><span data-i18n="optLookahead"></span> <input type="number" id="lookahead" min="0" max="30" /></label>
 
-  <h2>키워드</h2>
-  <p class="muted">제목·채널명·설명·태그에 포함되면 AI 음악으로 판별합니다. 한 줄에 하나씩 입력합니다. 영문은 단어 단위로 비교합니다.</p>
+  <h2 data-i18n="optKeywords">키워드</h2>
+  <p class="muted" data-i18n="optKeywordsHelp"></p>
   <textarea id="keywords"></textarea>
 
-  <h2>차단한 채널</h2>
+  <h2 data-i18n="optBlocked">차단한 채널</h2>
   <ul id="blockedList"></ul>
-  <div class="add"><input id="blockedInput" placeholder="채널명 (재생 중 팝업에서 차단하면 채널 ID로 정확히 저장됩니다)" /><button data-add="blocked">추가</button></div>
+  <div class="add"><input id="blockedInput" data-i18n-placeholder="optBlockedPlaceholder" /><button data-add="blocked" data-i18n="optAdd"></button></div>
 
-  <h2>허용한 채널</h2>
-  <p class="muted">허용한 채널은 다른 기준에 걸려도 건너뛰지 않습니다.</p>
+  <h2 data-i18n="optAllowed">허용한 채널</h2>
+  <p class="muted" data-i18n="optAllowedHelp"></p>
   <ul id="allowedList"></ul>
-  <div class="add"><input id="allowedInput" placeholder="채널명" /><button data-add="allowed">추가</button></div>
+  <div class="add"><input id="allowedInput" data-i18n-placeholder="optAllowedPlaceholder" /><button data-add="allowed" data-i18n="optAdd"></button></div>
 
-  <button id="save">저장</button><span id="saved"></span>
+  <button id="save" data-i18n="optSave"></button><span id="saved"></span>
+
+  <p class="support muted">
+    <span data-i18n="optSupportBefore"></span><a href="https://buymeacoffee.com/hendrix1995" target="_blank" rel="noopener">Buy Me a Coffee</a><span data-i18n="optSupportAfter"></span>
+  </p>
 
   <script src="../src/settings.js"></script>
+  <script src="../src/i18n.js"></script>
   <script src="options.js"></script>
 </body>
 </html>
