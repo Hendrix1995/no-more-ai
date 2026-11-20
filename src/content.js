@@ -17,6 +17,7 @@
   const verdicts = new Map(); // videoId -> { ai, reasons } (전체 검사 결과만 저장)
   const inflight = new Map(); // videoId -> Promise<verdict>
   const failures = new Map(); // videoId -> { delay, retryAt } 현재 곡 검사 실패. 다시 멈추지 않고 폴링에서 재검사한다.
+  const prefetchFailures = new Map(); // videoId -> retryAt 미리 검사에 실패한 곡. 패널 스캔마다 곧바로 다시 요청하지 않게 한다.
   const queue = [];
   let running = 0;
 
@@ -106,6 +107,7 @@
 
   function enqueue(item) {
     if (verdicts.has(item.videoId) || inflight.has(item.videoId)) return;
+    if (Date.now() < (prefetchFailures.get(item.videoId) || 0)) return;
     if (queue.some((q) => q.videoId === item.videoId)) return;
     queue.push({ videoId: item.videoId, title: item.title, channelName: item.channelName });
     pump();
@@ -116,7 +118,10 @@
       const job = queue.shift();
       running++;
       getVerdict(job.videoId, job)
-        .catch((e) => console.warn('[No More AI] 검사 실패', job.videoId, e))
+        .catch((e) => {
+          console.warn('[No More AI] 검사 실패', job.videoId, e);
+          prefetchFailures.set(job.videoId, Date.now() + RETRY_MAX_MS);
+        })
         .finally(() => {
           running--;
           scheduleScan();
@@ -167,7 +172,7 @@
       Object.assign(box.style, {
         position: 'fixed',
         left: '24px',
-        bottom: '24px',
+        bottom: Y.isMusic ? '96px' : '24px', // YouTube Music은 하단 플레이어 바를 가리지 않도록 올린다
         zIndex: 99999,
         maxWidth: '420px',
         padding: '10px 14px',
@@ -221,13 +226,14 @@
       toast(nmaT('toastAllAi'));
       return;
     }
+    // YouTube Music 대기열 항목에는 링크가 없어 다음 곡 버튼으로 넘긴다. 바로 다음 곡도 AI면 재생될 때 다시 건너뛴다.
     let moved = false;
-    if (next) {
+    if (next && next.anchor) {
       next.anchor.click();
       moved = true;
     } else {
-      const nextButton = document.querySelector('.ytp-next-button');
-      if (nextButton && nextButton.offsetParent !== null) {
+      const nextButton = Y.nextButton();
+      if (nextButton) {
         nextButton.click();
         moved = true;
       }
