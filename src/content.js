@@ -17,6 +17,7 @@
   const verdicts = new Map(); // videoId -> { ai, reasons } (전체 검사 결과만 저장)
   const inflight = new Map(); // videoId -> Promise<verdict>
   const failures = new Map(); // videoId -> { delay, retryAt } 현재 곡 검사 실패. 다시 멈추지 않고 폴링에서 재검사한다.
+  const prefetchFailures = new Map(); // videoId -> retryAt 미리 검사에 실패한 곡. 패널 스캔마다 곧바로 다시 요청하지 않게 한다.
   const queue = [];
   let running = 0;
 
@@ -106,6 +107,7 @@
 
   function enqueue(item) {
     if (verdicts.has(item.videoId) || inflight.has(item.videoId)) return;
+    if (Date.now() < (prefetchFailures.get(item.videoId) || 0)) return;
     if (queue.some((q) => q.videoId === item.videoId)) return;
     queue.push({ videoId: item.videoId, title: item.title, channelName: item.channelName });
     pump();
@@ -116,7 +118,10 @@
       const job = queue.shift();
       running++;
       getVerdict(job.videoId, job)
-        .catch((e) => console.warn('[No More AI] 검사 실패', job.videoId, e))
+        .catch((e) => {
+          console.warn('[No More AI] 검사 실패', job.videoId, e);
+          prefetchFailures.set(job.videoId, Date.now() + RETRY_MAX_MS);
+        })
         .finally(() => {
           running--;
           scheduleScan();
