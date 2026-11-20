@@ -167,7 +167,7 @@
       Object.assign(box.style, {
         position: 'fixed',
         left: '24px',
-        bottom: '24px',
+        bottom: Y.isMusic ? '96px' : '24px', // YouTube Music은 하단 플레이어 바를 가리지 않도록 올린다
         zIndex: 99999,
         maxWidth: '420px',
         padding: '10px 14px',
@@ -221,13 +221,14 @@
       toast(nmaT('toastAllAi'));
       return;
     }
+    // YouTube Music 대기열 항목에는 링크가 없어 다음 곡 버튼으로 넘긴다. 바로 다음 곡도 AI면 재생될 때 다시 건너뛴다.
     let moved = false;
-    if (next) {
+    if (next && next.anchor) {
       next.anchor.click();
       moved = true;
     } else {
-      const nextButton = document.querySelector('.ytp-next-button');
-      if (nextButton && nextButton.offsetParent !== null) {
+      const nextButton = Y.nextButton();
+      if (nextButton) {
         nextButton.click();
         moved = true;
       }

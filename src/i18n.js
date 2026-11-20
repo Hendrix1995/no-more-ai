@@ -3,7 +3,7 @@
 const NMA_MESSAGES = {
   ko: {
     popupToggle: 'AI 음악 걸러내기',
-    popupIdle: 'YouTube 재생 페이지에서 상태가 표시됩니다.',
+    popupIdle: 'YouTube 또는 YouTube Music에서 재생 중일 때 상태가 표시됩니다.',
     popupBlock: '이 채널 차단',
     popupAllow: '이 채널 허용',
     popupOptions: '설정 열기',
@@ -54,7 +54,7 @@ const NMA_MESSAGES = {
   },
   en: {
     popupToggle: 'Filter AI music',
-    popupIdle: 'Status appears on a YouTube watch page.',
+    popupIdle: 'Status appears while playing on YouTube or YouTube Music.',
     popupBlock: 'Block this channel',
     popupAllow: 'Allow this channel',
     popupOptions: 'Open settings',

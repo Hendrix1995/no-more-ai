@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "No More AI Music",
-  "version": "0.2.2",
-  "description": "YouTube 플레이리스트에서 AI로 생성된 음악을 찾아 큐에서 제거하고 건너뜁니다.",
+  "version": "0.3.0",
+  "description": "YouTube와 YouTube Music 플레이리스트에서 AI로 생성된 음악을 찾아 큐에서 숨기고 건너뜁니다.",
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
@@ -13,12 +13,17 @@
     "storage"
   ],
   "host_permissions": [
-    "https://www.youtube.com/*"
+    "https://www.youtube.com/*",
+    "https://music.youtube.com/*"
   ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
   "content_scripts": [
     {
       "matches": [
-        "https://www.youtube.com/*"
+        "https://www.youtube.com/*",
+        "https://music.youtube.com/*"
       ],
       "js": [
         "src/player-bridge.js"
@@ -28,7 +33,8 @@
     },
     {
       "matches": [
-        "https://www.youtube.com/*"
+        "https://www.youtube.com/*",
+        "https://music.youtube.com/*"
       ],
       "js": [
         "src/settings.js",
